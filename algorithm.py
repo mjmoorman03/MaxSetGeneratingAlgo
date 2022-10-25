@@ -1,7 +1,6 @@
 import math
 import itertools 
 
-
 ''' rotNum must be a tuple of p and q '''
 def MaxSetGenerating(d, rotNum, orbit):
     p = rotNum[0]
@@ -23,7 +22,10 @@ def MaxSetGenerating(d, rotNum, orbit):
         for combo in itertools.combinations(range(d-1-N_q), d-1-i):
             
             placements.append([j in combo for j in range(d-1-N_q)])
-
+        
+        # because this and fillGap() do not depend on what placements have been determined so far,
+        # and do not dependent on the outermost for loop as well for the arguments, can we not move both this
+        # and fillGap() outside our for loop altogether?
         gapSizes = gapSizes(orbit, p, q)
 
     pass
