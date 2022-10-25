@@ -14,14 +14,18 @@ def MaxSetGenerating(d, rotNum, orbit):
     while newOrbit[0] > 0:
         newOrbit = map(lambda x: x - 1, newOrbit)
 
+    N_q = newOrbit[len(newOrbit) - 1]
+
     maximalSets = set()
 
-    for i in range(newOrbit[len(newOrbit) - 1]):
+    for i in range(N_q - 1):
         placements = []
 
-        for combo in itertools.combinations(range(d-1-newOrbit[len(newOrbit) - 1]), d-1-i):
+        for combo in itertools.combinations(range(d-1-N_q), d-1-i):
             
-            pass
+            placement = []
+            for j in range(d-1-N_q):
+                placement.append(j in combo)
 
     pass
 
