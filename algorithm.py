@@ -16,11 +16,11 @@ def MaxSetGenerating(d, rotNum, orbit):
 
     maximalSets = set()
 
-    for i in range(len(newOrbit)):
+    for i in range(newOrbit[len(newOrbit) - 1]):
         placements = []
 
-    for combo in itertools.combinations([0,1], len(newOrbit)+1):
-        pass
+        for combo in itertools.combinations(range(d-1-newOrbit[len(newOrbit) - 1]), d-1-i):
+            pass
 
     pass
 
