@@ -9,9 +9,15 @@ def MaxSetGenerating(d, rotNum, orbit):
     q = rotNum[1]
     orbit = orbit.sort()
     newOrbit = orbit 
-    while newOrbit[0] != 0:
+
+    # reduce first digit to 0
+    while newOrbit[0] > 0:
         newOrbit = map(lambda x: x - 1, newOrbit)
 
+    maximalSets = set()
+
+    for i in range(len(newOrbit)):
+        
 
     pass
 
