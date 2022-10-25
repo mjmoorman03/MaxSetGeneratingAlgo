@@ -1,4 +1,3 @@
-from hashlib import new
 import math
 import itertools 
 
@@ -23,14 +22,19 @@ def MaxSetGenerating(d, rotNum, orbit):
 
         for combo in itertools.combinations(range(d-1-N_q), d-1-i):
             
-            placement = [j in combo for j in range(d-1-N_q)]
-
-    pass
-
-
-def fillGap():
+            placements.append([j in combo for j in range(d-1-N_q)])
 
 
     pass
 
 
+def fillGap(placements, currentGap, gapSizes, numPreimagesLeft):
+
+    pass
+
+
+def gapSizes(orbit, p, q, d):
+
+    sizes = [orbit[i+1]-orbit[i] for i in range(len(orbit)-1)]
+    sizes[q-p] = sizes[q-p]
+    return sizes
