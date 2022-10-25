@@ -29,9 +29,20 @@ def MaxSetGenerating(d, rotNum, orbit):
     pass
 
 
-def fillGap(placements, currentGap, gapSizes, numPreimagesLeft):
+''' placements is now last argument so that it can be a keyword argument with default 
+    value of an empty list'''
+def fillGap(currentGap, gapSizes, numPreimagesLeft, placements=[[]]):
+    
+    if numPreimagesLeft == 0:
+        return placements
+    newPlacements = []
+    
+    for i in range(len(placements)):
+        # temporary, not sure what arguments should be
+        for combo in itertools.combinations([], 0):
+            newPlacements.append(placements[i] + combo)
 
-    pass
+    return fillGap(currentGap + 1, gapSizes, numPreimagesLeft - 1, placements=newPlacements)
 
 
 def gapSizes(orbit, p, q):
