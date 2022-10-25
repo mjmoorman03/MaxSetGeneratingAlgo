@@ -24,6 +24,7 @@ def MaxSetGenerating(d, rotNum, orbit):
             
             placements.append([j in combo for j in range(d-1-N_q)])
 
+        gapSizes = gapSizes(orbit, p, q)
 
     pass
 
