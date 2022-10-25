@@ -36,5 +36,5 @@ def fillGap(placements, currentGap, gapSizes, numPreimagesLeft):
 def gapSizes(orbit, p, q, d):
 
     sizes = [orbit[i+1]-orbit[i] for i in range(len(orbit)-1)]
-    sizes[q-p] = sizes[q-p]
+    sizes[q-p-1] = sizes[q-p-1] - 1
     return sizes
