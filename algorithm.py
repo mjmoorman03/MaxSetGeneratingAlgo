@@ -1,4 +1,3 @@
-import math
 from itertools import combinations
 
 ''' rotNum must be a tuple of p and q '''
