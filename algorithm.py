@@ -24,7 +24,7 @@ def MaxSetGenerating(d, rotNum, orbit):
         placements = []
         for combo in combinations(range(i, d-2), d-1-N_q):
             
-            placements.append([(q-1) if j in combo else -1 for j in range(d-2)])
+            placements.append([(q-1) if j in combo else None for j in range(d-2)])
         
         # because this and fillGap() do not depend on what placements have been determined so far,
         # and do not dependent on the outermost for loop as well for the arguments, can we not move both this
@@ -52,7 +52,7 @@ def fillGap(position, currentGap, gapSizes, numPreimagesLeft, placements=[[]]):
             newPlacements.append(placements[i])
             numberEmptySeen = 0
             for j in range(len(newPlacements[-1])):
-                if newPlacements[-1][j] == -1:
+                if newPlacements[-1][j] is None:
                     if numberEmptySeen in combo:
                         if j < position:
                             newPlacements[-1][j] = currentGap + 1
