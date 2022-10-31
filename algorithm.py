@@ -70,7 +70,7 @@ def getGapSizes(orbit, p, q):
 
 def convertPlacementToSet(placement, d, p, q):
 
-    digitLists = [[] for i in range(d - 1)]
+    digitLists = [[] for _ in range(d - 1)]
 
     currentDigit = 0
 
@@ -88,10 +88,10 @@ def convertPlacementToSet(placement, d, p, q):
     for digitList in digitLists:
         orbit = "_"
         i = 0
-        orbit = orbit + str(digitList[i])
+        orbit += str(digitList[i])
         i = p
         while i != 0:
-            orbit = orbit + str(digitList[i])
+            orbit += str(digitList[i])
             i = (i + p) % q
         maxSet.append(orbit)
 
