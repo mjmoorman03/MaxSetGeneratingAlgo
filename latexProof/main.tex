@@ -1,0 +1,102 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage[english]{babel}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\graphicspath{{./images}}
+\usepackage{amsthm}
+\usepackage{classTools}
+\usepackage{marvosym}
+\let\marvosymLightning\Lightning
+\usepackage{amssymb}
+\newcommand{\done}{\renewcommand\qedsymbol{$\blacksquare$}}
+\newcommand{\contradiction}{\renewcommand\qedsymbol{$\Lightning$}}
+\usepackage[left=3cm,right=3cm,top=2cm,bottom=2cm]{geometry} % page settings
+\newtheorem{sublemma}{Lemma}[section]
+\newcommand{\Orbit}{\mathcal{O}}
+\renewcommand{\thefootnote}{\roman{footnote}}
+
+\title{Math Research Proof}
+\author{Michael Moorman, Gabe Quijano, Hugh Williams}
+\date{October 2022}
+
+\begin{document}
+
+\maketitle
+
+\section*{Maximal Set Generating Algorithm}
+
+\subsection*{Algorithm}
+\begin{algorithm}[H]
+\Input{The degree $d$, rotational number $\frac{p}{q}$, and an orbit $\Orbit$ with it's digits in ascending order $\{\Orbit_1$, $\Orbit_2$, ..., $\Orbit_q\}$}
+\Output{A set of all maximal rotational sets containing $\Orbit$, denoted $M$}
+    let $N$ = an array of the integers in $\Orbit$\;
+    \While{$N_1 \neq 0$}
+    {
+
+        \Indp  \ForEach{$i=1\ldots,q$} {
+        
+            \Indp $N_i$ = $N_i-1$\;
+        
+        }
+        
+        %$N$ -= \{1, 1, 1..., 1\}
+
+    }
+    let \texttt{gapSizes} = getGapSizes($\mathcal{O}$, $p,q$);
+
+    let \texttt{maximalSets} = \{\}, an empty set\;
+
+    \ForEach{$i=1\dots N_q$}{
+        let \texttt{placements} = \{\}, an empty list\;
+
+        let $S = $ the range $[i,d-3]$ of integers, inclusive;
+
+        \ForEach{combo $\in \binom{S}{d-1-N_q}$\footnotemark \footnotetext[9]{Allow this to denote the set of all $d-1-N_q$ combinations of elements of $S$, similarly to the combination in \texttt{fillGap()}}}{
+            let \texttt{placement} = \{\}, an empty list\;
+
+            \ForEach{$j=0\dots d-3$}{
+                \lIf{$j \in combo$}{placement.append($q-1$)}
+                \lElse{placement.append($\emptyset$)}
+            }
+            placements.append(placement)\;
+        }
+        let \texttt{placements} = \texttt{fillGap}($i$, 0, gapSizes, $N_q - 1$, placements)\;
+
+        \ForEach{placement $\in$ placements}{
+            maximalSets = maximalSets $\cup$  \texttt{convertPlacementToSet}(placement,$d, p, q$)\;
+            }
+    }  
+    return \texttt{maximalSets}
+\caption{let $N_j$ represent the $j$th digit of $N$ in ascending order}
+\end{algorithm}
+
+
+\begin{algorithm}[H]
+\Input{position, currentGap, gapSizes, numPreimagesLeft, placements}
+\Output{A list of preimage placements that fulfill the conditions set out by given gap sizes required to make the maximal rotational set contain the orbit.}
+% Then convert all preimage placements to max rot sets
+    \lIf {\texttt{numPreimagesLeft} == $0$}{\Return placements}
+
+    
+
+ 
+\caption{Auxiliary function: \texttt{fillGap()}}
+\end{algorithm}
+
+\subsection*{Correctness}
+
+\begin{proof}
+
+\done
+\end{proof}
+
+\subsection*{Runtime}
+The runtime of this algorithm is \_
+
+\begin{proof}
+
+\done
+\end{proof}
+
+\end{document}
