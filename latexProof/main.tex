@@ -16,6 +16,7 @@
 \newcommand{\Orbit}{\mathcal{O}}
 \renewcommand{\thefootnote}{\roman{footnote}}
 
+
 \title{Math Research Proof}
 \author{Michael Moorman, Gabe Quijano, Hugh Williams}
 \date{October 2022}
@@ -25,8 +26,8 @@
 \maketitle
 
 \section*{Maximal Set Generating Algorithm}
-
-\subsection*{Algorithm}
+For all following algorithms, 0-indexing is standard unless explicitly specified,
+such as the indices of the digits of an orbit.\\
 \begin{algorithm}[H]
 \Input{The degree $d$, rotational number $\frac{p}{q}$, and an orbit $\Orbit$ with it's digits in ascending order $\{\Orbit_1$, $\Orbit_2$, ..., $\Orbit_q\}$}
 \Output{A set of all maximal rotational sets containing $\Orbit$, denoted $M$}
@@ -47,12 +48,12 @@
 
     let \texttt{maximalSets} = \{\}, an empty set\;
 
-    \ForEach{$i=1\dots N_q$}{
+    \ForEach{$i=0\dots N_q-1$}{
         let \texttt{placements} = \{\}, an empty list\;
 
         let $S = $ the range $[i,d-3]$ of integers, inclusive;
 
-        \ForEach{combo $\in \binom{S}{d-1-N_q}$\footnotemark \footnotetext[9]{Allow this to denote the set of all $d-1-N_q$ combinations of elements of $S$, similarly to the combination in \texttt{fillGap()}}}{
+        \ForEach{combo $\in \binom{S}{d-1-N_q}\footnote[1]{Allow this to denote the set of all $d-1-N_q$ combinations of elements of $S$, similarly to the combination in \texttt{fillGap()}}$}{
             let \texttt{placement} = \{\}, an empty list\;
 
             \ForEach{$j=0\dots d-3$}{
@@ -67,8 +68,8 @@
             maximalSets = maximalSets $\cup$  \texttt{convertPlacementToSet}(placement,$d, p, q$)\;
             }
     }  
-    return \texttt{maximalSets}
-\caption{let $N_j$ represent the $j$th digit of $N$ in ascending order}
+    \Return \texttt{maximalSets}
+\caption{\texttt{MaxSetGeneration()}: let $N_j$ represent the $j$th digit of $N$ in ascending order}
 \end{algorithm}
 
 
@@ -78,20 +79,53 @@
 % Then convert all preimage placements to max rot sets
     \lIf {\texttt{numPreimagesLeft} == $0$}{\Return placements}
 
-    
+    let \texttt{newPlacements} = \{\}, an empty list\;
 
- 
+    let $S$ = the range $[0,$ numPreimagesLeft$-1]$ of integers, inclusive;
+
+    \ForEach{$i=0\dots |placements|-1$}{
+        \ForEach{combo $\in \binom{S}{gapSizes[currentGap]}$}{
+            newPlacements.append(placements[$i$])\;
+            let \texttt{emptyGaps} = 0\;
+            \ForEach{$j=0\dots |$newPlacements$[-1]\footnote[2]{Allow 
+            this to represent the index of the last element in this list.}|-1$}{
+                \If{newPlacements$[-1][j]=\emptyset$}{
+                    \If{emptyGaps $\in combo$}{
+                        \lIf{$j<$ position}{newPlacements$[-1][j]$ = currentGap$+ 1$}
+                        \lElse{newPlacements$[-1][j]$ = currentGap}
+                    }
+                    \texttt{emptyGaps} $=$ \texttt{emptyGaps} $+ 1$\;
+                }
+            }
+        }
+    }
+    \Return \texttt{fillGap}(position, currentGap + 1, gapSizes, numPreimagesLeft - gapSizes[currentGap], newPlacements)
 \caption{Auxiliary function: \texttt{fillGap()}}
 \end{algorithm}
 
-\subsection*{Correctness}
+\begin{algorithm}[H]
+\Input{an orbit $\Orbit$ with it's digits in ascending order $\{\Orbit_1$, $\Orbit_2$, ..., $\Orbit_q\}$, the corresponding rotational number $\frac{p}{q}$}
+\Output{}
+% need to remark what the output of this function is 
+    let \texttt{sizes} = \{\}, an empty list\;
+    \ForEach{$i=1\dots q-1$}{
+        sizes.append($\mathcal{O}_{i+1}-\mathcal{O}_i$)\;
+    }
+    sizes[$q-p-1$] = sizes[$q-p-1]-1$\;
+    \Return sizes\;
+\caption{Auxiliary function: \texttt{getGapSizes()}}
+\end{algorithm}
+
+
+
+\section*{Correctness}
 
 \begin{proof}
 
 \done
 \end{proof}
 
-\subsection*{Runtime}
+\section*{Runtime}
 The runtime of this algorithm is \_
 
 \begin{proof}
