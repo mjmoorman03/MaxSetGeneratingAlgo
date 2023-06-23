@@ -1,7 +1,12 @@
 from itertools import combinations
+from typing import Iterable, Sequence
 
-''' rotNum must be a tuple of p and q '''
-def MaxSetGenerating(d, rotNum, orbit):
+
+def MaxSetGenerating(d : int, rotNum : Sequence[int], orbit : list[int]) -> list[list[str]]:
+    ''' Given a degree d, a rotational orbit O = [o_1, o_2, ..., o_n], and a 
+        rotation number p/q passed as a tuple (p, q), returns a list of all 
+        maximal rotational sets of degree d containing orbit O, with each 
+        orbit represented as a string.'''
 
     p = rotNum[0]
     q = rotNum[1]
@@ -14,9 +19,9 @@ def MaxSetGenerating(d, rotNum, orbit):
     while newOrbit[0] > 0:
         newOrbit = map(lambda x: x - 1, newOrbit)
 
+    # last point in orbit spatially
     N_q = newOrbit[-1]
 
-    #maximalSets = set()
     maximalSets = []
 
     for i in range(N_q):
@@ -25,12 +30,6 @@ def MaxSetGenerating(d, rotNum, orbit):
             
             placements.append([(q-1) if j in combo else None for j in range(d-2)])
         
-        # because this and fillGap() do not depend on what placements have been determined so far,
-        # and do not dependent on the outermost for loop as well for the arguments, can we not move both this
-        # and fillGap() outside our for loop altogether?
-        #^
-        # Yes for gapSizes, but I actually realized we can make fillGap dependent
-        # on current combinations in a useful manner by passing in placements
         placements = fillGap(i, 0, gapSizes, N_q - 1, placements)
 
         for placement in placements:
@@ -38,9 +37,8 @@ def MaxSetGenerating(d, rotNum, orbit):
 
     return maximalSets
 
-''' placements is now last argument so that it can be a keyword argument with default 
-    value of an empty list'''
-def fillGap(position, currentGap, gapSizes, numPreimagesLeft, placements=[[]]):
+
+def fillGap(position : int, currentGap : int, gapSizes : list[int], numPreimagesLeft : int, placements=[[]]) -> list[list[int]]:
 
     if numPreimagesLeft == 0:
         return placements
@@ -62,12 +60,13 @@ def fillGap(position, currentGap, gapSizes, numPreimagesLeft, placements=[[]]):
     return fillGap(position, currentGap + 1, gapSizes, numPreimagesLeft - gapSizes[currentGap], placements=newPlacements)
 
 
-def getGapSizes(orbit, p, q):
+def getGapSizes(orbit : list[int], p : int, q : int) -> list[int]:
     sizes = [orbit[i+1]-orbit[i] for i in range(len(orbit)-1)]
     sizes[q-p-1] -= 1
     return sizes
 
-def convertPlacementToSet(placement, d, p, q):
+
+def convertPlacementToSet(placement : list[int], d : int, p : int, q : int) -> list[str]:
 
     digitLists = [[] for _ in range(d - 1)]
 
@@ -96,4 +95,6 @@ def convertPlacementToSet(placement, d, p, q):
 
     return maxSet
 
-print(MaxSetGenerating(5, (1,5), [0,0,1,1,3]))
+
+if __name__ == "__main__":
+    print(MaxSetGenerating(5, (1,5), [0,0,1,1,3]))
