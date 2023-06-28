@@ -25,6 +25,8 @@ def MaxSetGenerating(d : int, rotNum : Sequence[int], orbit : list[int]) -> list
     maximalSets = []
 
     for i in range(N_q):
+        # Each placement is an in progress construction of a complete placement of pre-images of zero
+        # Complete placements of pre-images of zero correspond one-to-one with maximal sets
         placements = []
         for combo in combinations(range(i, d-2), d-1-N_q):
             
@@ -33,6 +35,7 @@ def MaxSetGenerating(d : int, rotNum : Sequence[int], orbit : list[int]) -> list
         placements = fillGap(i, 0, gapSizes, N_q - 1, placements)
 
         for placement in placements:
+            # Find corresponding maximal set for each placement
             maximalSets.append(convertPlacementToSet(placement, d, p, q))
 
     return maximalSets
@@ -61,12 +64,18 @@ def fillGap(position : int, currentGap : int, gapSizes : list[int], numPreimages
 
 
 def getGapSizes(orbit : list[int], p : int, q : int) -> list[int]:
+    """Given an orbit, its rotational numerator p, and rotational denominator q,
+    finds the size of gaps (i.e. number of pre-images left to place) between each
+    adjacent point in the orbit."""
     sizes = [orbit[i+1]-orbit[i] for i in range(len(orbit)-1)]
+    # Removes one from this gap because it has the principal pre-image
     sizes[q-p-1] -= 1
     return sizes
 
 
 def convertPlacementToSet(placement : list[int], d : int, p : int, q : int) -> list[str]:
+    """Given a placement of pre-images, degree d, rotational numerator p, and rotational denominator q,
+    find the corresponding maximal rotational set for this placement."""
 
     digitLists = [[] for _ in range(d - 1)]
 
