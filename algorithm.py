@@ -24,24 +24,28 @@ def MaxSetGenerating(d : int, rotNum : Sequence[int], orbit : list[int]) -> list
 
     maximalSets = []
 
+    # Find the maximal sets that contain this orbit at the (i+1)th position
     for i in range(N_q):
-        # Each placement is an in progress construction of a complete placement of pre-images of zero
-        # Complete placements of pre-images of zero correspond one-to-one with maximal sets
+        # Each placement is an in progress construction of a complete placement of pre-images of zero,
+        # these placements correspond one-to-one with maximal sets
         placements = []
+        # Place pre-images that fall outside the orbit (i.e. after the last point since we shifted the orbit down)
         for combo in combinations(range(i, d-2), d-1-N_q):
-            
             placements.append([(q-1) if j in combo else None for j in range(d-2)])
         
+        # Place pre-images in the gaps that fall within the orbit
         placements = fillGap(i, 0, gapSizes, N_q - 1, placements)
 
+        # Find corresponding maximal set for each placement
         for placement in placements:
-            # Find corresponding maximal set for each placement
             maximalSets.append(convertPlacementToSet(placement, d, p, q))
 
     return maximalSets
 
 
 def fillGap(position : int, currentGap : int, gapSizes : list[int], numPreimagesLeft : int, placements=[[]]) -> list[list[int]]:
+    """Given the position within the maximal set, the gap that is being checked, the gap sizes, the number of pre-images left to place,
+    and the placements found, recursively fill the gaps without repetition."""
 
     if numPreimagesLeft == 0:
         return placements
