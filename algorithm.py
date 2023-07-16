@@ -1,15 +1,12 @@
 from itertools import combinations
-from typing import Iterable, Sequence
 
+def MaxSetGenerating(d : int, orbit : list[int]) -> list[list[str]]:
+    ''' Given a degree d and a rotational orbit O = [o_1, o_2, ..., o_n],
+        returns a list of all maximal rotational sets of degree d 
+        containing orbit O, with each orbit represented as a string.'''
 
-def MaxSetGenerating(d : int, rotNum : Sequence[int], orbit : list[int]) -> list[list[str]]:
-    ''' Given a degree d, a rotational orbit O = [o_1, o_2, ..., o_n], and a 
-        rotation number p/q passed as a tuple (p, q), returns a list of all 
-        maximal rotational sets of degree d containing orbit O, with each 
-        orbit represented as a string.'''
+    p, q = rotNum(orbit)
 
-    p = rotNum[0]
-    q = rotNum[1]
     orbit.sort()
     newOrbit = orbit 
 
@@ -17,26 +14,21 @@ def MaxSetGenerating(d : int, rotNum : Sequence[int], orbit : list[int]) -> list
 
     # reduce first digit to 0
     while newOrbit[0] > 0:
-        newOrbit = map(lambda x: x - 1, newOrbit)
+        newOrbit = list(map(lambda x: x - 1, newOrbit))
 
     # last point in orbit spatially
     N_q = newOrbit[-1]
 
     maximalSets = []
 
-    # Find the maximal sets that contain this orbit at the (i+1)th position
     for i in range(N_q):
-        # Each placement is an in progress construction of a complete placement of pre-images of zero,
-        # these placements correspond one-to-one with maximal sets
         placements = []
-        # Place pre-images that fall outside the orbit (i.e. after the last point since we shifted the orbit down)
         for combo in combinations(range(i, d-2), d-1-N_q):
+            
             placements.append([(q-1) if j in combo else None for j in range(d-2)])
         
-        # Place pre-images in the gaps that fall within the orbit
         placements = fillGap(i, 0, gapSizes, N_q - 1, placements)
 
-        # Find corresponding maximal set for each placement
         for placement in placements:
             maximalSets.append(convertPlacementToSet(placement, d, p, q))
 
@@ -44,8 +36,6 @@ def MaxSetGenerating(d : int, rotNum : Sequence[int], orbit : list[int]) -> list
 
 
 def fillGap(position : int, currentGap : int, gapSizes : list[int], numPreimagesLeft : int, placements=[[]]) -> list[list[int]]:
-    """Given the position within the maximal set, the gap that is being checked, the gap sizes, the number of pre-images left to place,
-    and the placements found, recursively fill the gaps without repetition."""
 
     if numPreimagesLeft == 0:
         return placements
@@ -68,18 +58,12 @@ def fillGap(position : int, currentGap : int, gapSizes : list[int], numPreimages
 
 
 def getGapSizes(orbit : list[int], p : int, q : int) -> list[int]:
-    """Given an orbit, its rotational numerator p, and rotational denominator q,
-    finds the size of gaps (i.e. number of pre-images left to place) between each
-    adjacent point in the orbit."""
     sizes = [orbit[i+1]-orbit[i] for i in range(len(orbit)-1)]
-    # Removes one from this gap because it has the principal pre-image
     sizes[q-p-1] -= 1
     return sizes
 
 
 def convertPlacementToSet(placement : list[int], d : int, p : int, q : int) -> list[str]:
-    """Given a placement of pre-images, degree d, rotational numerator p, and rotational denominator q,
-    find the corresponding maximal rotational set for this placement."""
 
     digitLists = [[] for _ in range(d - 1)]
 
@@ -109,5 +93,27 @@ def convertPlacementToSet(placement : list[int], d : int, p : int, q : int) -> l
     return maxSet
 
 
+def rotNum(orbit : list[int]) -> tuple[int, int]:
+    ''' Given a rotational orbit O = [o_1, o_2, ..., o_n], returns the 
+        rotational number of O.'''
+
+    copy = orbit.copy()
+    ordered = sorted(orbit)
+
+    while copy[0] != ordered[0]:
+        for i in range(len(copy) - 1):
+            copy[i] = copy[i + 1]
+        copy[-1] = ordered[0]
+
+    rotNumer = 1
+
+    while copy[1] != ordered[rotNumer]:
+        rotNumer += 1
+        if rotNumer == len(copy):
+            break
+
+    return rotNumer, len(orbit)
+
+
 if __name__ == "__main__":
-    print(MaxSetGenerating(5, (1,5), [0,0,1,1,3]))
+    print(MaxSetGenerating(3, [0,1,2]))
